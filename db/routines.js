@@ -1,24 +1,44 @@
 const client = require("./client");
 
-async function createRoutine({ creatorId, isPublic, name, goal }) {}
+const createRoutine = async ({ creatorId, isPublic, name, goal }) => {
 
-async function getRoutineById(id) {}
+};
 
-// async function getRoutinesWithoutActivities() {}
+const getRoutineById = async (id) => {
 
-async function getAllRoutines() {}
+};
 
-async function getAllPublicRoutines() {}
+// const getRoutinesWithoutActivities = async () => {
 
-async function getAllRoutinesByUser({ username }) {}
+// };
 
-// async function getPublicRoutinesByUser({ username }) {}
+const getAllRoutines = async () => {
 
-// async function getPublicRoutinesByActivity({ id }) {}
+};
 
-async function updateRoutine({ id, ...fields }) {}
+const getAllPublicRoutines = async () => {
 
-async function destroyRoutine(id) {}
+};
+
+const getAllRoutinesByUser = async ({ username }) => {
+
+};
+
+// const getPublicRoutinesByUser = async ({ username }) => {
+
+// };
+
+// const getPublicRoutinesByActivity = async ({ id }) => {
+
+// };
+
+const updateRoutine = async ({ id, ...fields }) => {
+
+};
+
+const destroyRoutine = async (id) => {
+
+};
 
 module.exports = {
   getRoutineById,

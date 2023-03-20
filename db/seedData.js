@@ -2,24 +2,24 @@
 // const { } = require('./');
 const client = require("./client")
 
-async function dropTables() {
-  try{
-  console.log("Dropping All Tables...")
-  await client.query(`
+const dropTables = async () => {
+  try {
+    console.log("Dropping All Tables...")
+    await client.query(`
     DROP TABLE IF EXISTS routine_activities;
     DROP TABLE IF EXISTS routines;
     DROP TABLE IF EXISTS activities;
     DROP TABLE IF EXISTS users;
   `);
-  console.log("Finished dropping tables!")
-  } catch(err){
+    console.log("Finished dropping tables!")
+  } catch (err) {
     console.log('Error while dropping tables')
     throw err;
   }
-}
+};
 
-async function createTables() {
-  try{
+const createTables = async () => {
+  try {
     console.log("Starting to build tables...")
     await client.query(`
       CREATE TABLE users(
@@ -51,12 +51,12 @@ async function createTables() {
         UNIQUE ("routineId", "activityId")
       );
     `);
-    console.log( "Finished making tables!")
-      } catch(err){
-        console.log("Error making tables!")
-        throw err;
+    console.log("Finished making tables!")
+  } catch (err) {
+    console.log("Error making tables!")
+    throw err;
   }
-}
+};
 
 /* 
 
@@ -64,7 +64,7 @@ DO NOT CHANGE ANYTHING BELOW. This is default seed data, and will help you start
 
 */
 
-async function createInitialUsers() {
+const createInitialUsers = async () => {
   console.log("Starting to create users...")
   try {
     const usersToCreate = [
@@ -81,8 +81,9 @@ async function createInitialUsers() {
     console.error("Error creating users!")
     throw error
   }
-}
-async function createInitialActivities() {
+};
+
+const createInitialActivities = async () => {
   try {
     console.log("Starting to create activities...")
 
@@ -115,9 +116,9 @@ async function createInitialActivities() {
     console.error("Error creating activities!")
     throw error
   }
-}
+};
 
-async function createInitialRoutines() {
+const createInitialRoutines = async () => {
   console.log("starting to create routines...")
 
   const routinesToCreate = [
@@ -151,9 +152,9 @@ async function createInitialRoutines() {
   )
   console.log("Routines Created: ", routines)
   console.log("Finished creating routines.")
-}
+};
 
-async function createInitialRoutineActivities() {
+const createInitialRoutineActivities = async () => {
   console.log("starting to create routine_activities...")
   const [bicepRoutine, chestRoutine, legRoutine, cardioRoutine] =
     await getRoutinesWithoutActivities()
@@ -221,9 +222,9 @@ async function createInitialRoutineActivities() {
   )
   console.log("routine_activities created: ", routineActivities)
   console.log("Finished creating routine_activities!")
-}
+};
 
-async function rebuildDB() {
+const rebuildDB = async () => {
   try {
     await dropTables()
     await createTables()
@@ -235,10 +236,10 @@ async function rebuildDB() {
     console.log("Error during rebuildDB")
     throw error
   }
-}
+};
 
 module.exports = {
   rebuildDB,
   dropTables,
   createTables,
-}
+};

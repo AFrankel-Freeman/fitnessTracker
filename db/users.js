@@ -3,25 +3,25 @@ const client = require("./client");
 // database functions
 
 // user functions
-async function createUser({ username, password }) {
-  
-}
+const createUser = async ({ username, password }) => {
 
-async function getUser({ username, password }) {
+};
 
-}
+const getUser = async ({ username, password }) => {
 
-async function getUserById(userId) {
+};
 
-}
+const getUserById = async (userId) => {
 
-async function getUserByUsername(userName) {
+};
 
-}
+const getUserByUsername = async (userName) => {
+
+};
 
 module.exports = {
   createUser,
   getUser,
   getUserById,
   getUserByUsername,
-}
+};
