@@ -7,6 +7,7 @@ const createActivity = async ({ name, description }) => {
     const { rows: [activity] } = await client.query(`
       INSERT INTO activities(name, description)
       VALUES($1, $2)
+      ON CONFLICT (name) DO NOTHING
       RETURNING *;
     `, [name, description]);
     return activity;
@@ -32,7 +33,12 @@ const getAllActivities = async () => {
 
 const getActivityById = async (id) => {
   try {
-
+    const { rows:[ activity ] } = await client.query(`
+      SELECT *
+      FROM activities
+      WHERE id = ${id}
+    `);
+    return activity;
   } catch (error) {
     console.error(error);
     throw error
@@ -41,6 +47,12 @@ const getActivityById = async (id) => {
 
 const getActivityByName = async (name) => {
   try {
+    const { rows: [ activity ] } = await client.query (`
+      SELECT *
+      FROM activities
+      WHERE name = '${name}'
+    `);
+    return activity;
 
   } catch (error) {
     console.error(error);
@@ -62,8 +74,21 @@ const updateActivity = async ({ id, ...fields }) => {
   // don't try to update the id
   // do update the name and description
   // return the updated activity
+  const setString = Object.keys (fields).map(
+    (key, index) => `"${key}" = $${index+1}`
+  ).join(', ');
+    if(!setString.length){ 
+    return 
+  }
   try {
-
+    const { rows: [ activity ] } = await client.query(`
+      UPDATE activities
+      SET ${setString}
+      WHERE id = ${id}
+      RETURNING *;
+    `, Object.values(fields));
+    
+    return activity;
   } catch (error) {
     console.error(error);
     throw error
