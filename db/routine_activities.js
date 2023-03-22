@@ -1,4 +1,5 @@
 const client = require("./client");
+const { getRoutineById } = require("./routines");
 
 const addActivityToRoutine = async ({
   routineId,
@@ -21,7 +22,7 @@ const addActivityToRoutine = async ({
 
 const getRoutineActivityById = async (id) => {
   try {
-    const { rows: [ routineActivity ]} = await client.query(`
+    const { rows: [routineActivity] } = await client.query(`
       SELECT *
       FROM routine_activities
       WHERE id = ${id}
@@ -48,14 +49,14 @@ const getRoutineActivitiesByRoutine = async ({ id }) => {
 };
 
 const updateRoutineActivity = async ({ id, ...fields }) => {
-  const setString = Object.keys (fields).map(
-    (key, index) => `"${key}" = $${index+1}`
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${key}" = $${index + 1}`
   ).join(', ');
-    if(!setString.length){ 
-    return 
+  if (!setString.length) {
+    return
   }
   try {
-    const { rows: [ routineActivity ] } = await client.query(`
+    const { rows: [routineActivity] } = await client.query(`
       UPDATE routine_activities
       SET ${setString}
       WHERE id = ${id}
@@ -71,7 +72,7 @@ const updateRoutineActivity = async ({ id, ...fields }) => {
 
 const destroyRoutineActivity = async (id) => {
   try {
-    const { rows: [ routineActivity ] } = await client.query(`
+    const { rows: [routineActivity] } = await client.query(`
       DELETE FROM routine_activities
       WHERE id = ${id}
       RETURNING *;
@@ -86,8 +87,9 @@ const destroyRoutineActivity = async (id) => {
 
 const canEditRoutineActivity = async (routineActivityId, userId) => {
   try {
-    const  routineActivity = await getRoutineActivityById (routineActivityId)
-
+    const routineActivity = await getRoutineActivityById(routineActivityId);
+    const routine = await getRoutineById(routineActivity.routineId);
+    return userId === routine.creatorId;
   } catch (error) {
     console.error(error);
     throw error;

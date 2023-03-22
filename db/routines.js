@@ -16,7 +16,12 @@ const createRoutine = async ({ creatorId, isPublic, name, goal }) => {
 
 const getRoutineById = async (id) => {
   try {
-
+    const { rows: [routine] } = await client.query(`
+      SELECT *
+      FROM routines
+      WHERE id = ${id}
+    `);
+    return routine;
   } catch (error) {
     console.error(error);
     throw error
