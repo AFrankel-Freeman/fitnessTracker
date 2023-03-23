@@ -63,6 +63,16 @@ const getActivityByName = async (name) => {
 // used as a helper inside db/routines.js
 const attachActivitiesToRoutines = async (routines) => {
   try {
+    for (let i = 0; i < routines.length; i++) {
+      const { rows: activities } = await client.query(`
+        SELECT activities.*, routine_activities.duration, routine_activities.count, routine_activities.id AS "routineActivityId", routine_activities."routineId"
+        FROM routine_activities
+        JOIN activities
+          ON routine_activities."activityId"=activities.id
+        WHERE routine_activities."routineId"=${routines[i].id}
+      `)
+      routines[i].activities = activities;
+    }
 
   } catch (error) {
     console.error(error);

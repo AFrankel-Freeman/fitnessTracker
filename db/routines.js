@@ -1,3 +1,4 @@
+const { attachActivitiesToRoutines } = require("./activities");
 const client = require("./client");
 const { getRoutineActivitiesByRoutine } = require("./routine_activities");
 const { getUserById } = require("./users");
@@ -52,19 +53,9 @@ const getAllRoutines = async () => {
       SELECT routines.*, users.username AS "creatorName"
       FROM routines
       JOIN users
-        ON routines."creatorId"=users.id;
+      ON routines."creatorId"=users.id;
     `)
-
-    for (let i = 0; i < routines.length; i++) {
-      const { rows: activities } = await client.query(`
-        SELECT activities.*, routine_activities.duration, routine_activities.count, routine_activities.id AS "routineActivityId", routine_activities."routineId"
-        FROM routine_activities
-        JOIN activities
-          ON routine_activities."activityId"=activities.id
-        WHERE routine_activities."routineId"=${routines[i].id}
-      `)
-      routines[i].activities = activities;
-    };
+    await attachActivitiesToRoutines(routines);
     return routines;
   } catch (error) {
     console.error(error);
@@ -85,6 +76,9 @@ const getAllPublicRoutines = async () => {
 
 const getAllRoutinesByUser = async ({ username }) => {
   try {
+    const allRoutines = await getAllRoutines();
+    const routinesByUser = allRoutines.filter(routine => routine.creatorName === username);
+    return routinesByUser;
 
   } catch (error) {
     console.error(error);
@@ -92,17 +86,54 @@ const getAllRoutinesByUser = async ({ username }) => {
   }
 };
 
-// const getPublicRoutinesByUser = async ({ username }) => {
+const getPublicRoutinesByUser = async ({ username }) => {
+  try{
+    const allRoutines = await getAllRoutines();
+    const publicRoutinesByUser = allRoutines.filter(routine => routine.creatorName === username && routine.isPublic);
+    return publicRoutinesByUser;
 
-// };
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
-// const getPublicRoutinesByActivity = async ({ id }) => {
-
-// };
+const getPublicRoutinesByActivity = async ({ id }) => {
+  try{
+    const allRoutines = await getAllRoutines();
+    const publicRoutinesByActivity = allRoutines.filter(routine => {
+      let containsActivity = false;
+      for(let i = 0; i< routine.activities.length; i++){
+        if(routine.activities[i].id === id){
+          containsActivity= true;
+          break;
+        }
+      }
+      return containsActivity && routine.isPublic;
+    })
+    return publicRoutinesByActivity;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 const updateRoutine = async ({ id, ...fields }) => {
-  try {
+      const setString = Object.keys(fields).map(
+      (key, index) => `"${key}" = $${index + 1}`
+    ).join(', ');
+    if (!setString.length) {
+      return
+    }
+    try {
+      const { rows: [routine] } = await client.query(`
+        UPDATE routines
+        SET ${setString}
+        WHERE id = ${id}
+        RETURNING *;
+      `, Object.values(fields))
 
+      return routine;
   } catch (error) {
     console.error(error);
     throw error
@@ -111,6 +142,16 @@ const updateRoutine = async ({ id, ...fields }) => {
 
 const destroyRoutine = async (id) => {
   try {
+    await client.query(`
+      DELETE FROM routine_activities
+      WHERE "routineId" = ${id}
+    `)
+    const { rows: [routine] } = await client.query(`
+      DELETE FROM routines
+      WHERE id = ${id}
+      RETURNING *;
+    `)
+    return routine;
 
   } catch (error) {
     console.error(error);
@@ -124,8 +165,8 @@ module.exports = {
   getAllRoutines,
   getAllPublicRoutines,
   getAllRoutinesByUser,
-  // getPublicRoutinesByUser,
-  // getPublicRoutinesByActivity,
+  getPublicRoutinesByUser,
+  getPublicRoutinesByActivity,
   createRoutine,
   updateRoutine,
   destroyRoutine,

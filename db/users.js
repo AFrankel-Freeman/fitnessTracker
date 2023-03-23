@@ -21,7 +21,17 @@ const createUser = async ({ username, password }) => {
 
 const getUser = async ({ username, password }) => {
   try {
+    const { rows:[ user ]} = await client.query(`
+      SELECT *
+      FROM users
+      WHERE username = '${username}'
+      AND password = '${password}'
+    `)
+    if(user){
+      delete user.password
+    }
 
+    return user;
   } catch (error) {
     console.error(error);
     throw error;
@@ -31,13 +41,14 @@ const getUser = async ({ username, password }) => {
 const getUserById = async (userId) => {
   try {
     const { rows: [user] } = await client.query(`
-      SELECT(id, username)
+      SELECT id, username
       FROM users
       WHERE id=${userId};
     `)
     if (!user) {
       return null;
-    };
+    }
+    
     return user;
   } catch (error) {
     console.error(error);
@@ -45,9 +56,15 @@ const getUserById = async (userId) => {
   }
 };
 
-const getUserByUsername = async (userName) => {
+const getUserByUsername = async (username) => {
   try {
+    const { rows:[user] } = await client.query(`
+      SELECT *
+      FROM users
+      WHERE username = '${username}'
+    `)
 
+    return user;
   } catch (error) {
     console.error(error);
     throw error;

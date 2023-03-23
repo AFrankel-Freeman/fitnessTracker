@@ -1,5 +1,5 @@
 const client = require("./client");
-const { getRoutineById } = require("./routines");
+const { getRoutineById } = require("./routines.js");
 
 const addActivityToRoutine = async ({
   routineId,
@@ -86,9 +86,11 @@ const destroyRoutineActivity = async (id) => {
 };
 
 const canEditRoutineActivity = async (routineActivityId, userId) => {
+  console.log("what is this?", typeof getRoutineById)
   try {
     const routineActivity = await getRoutineActivityById(routineActivityId);
     const routine = await getRoutineById(routineActivity.routineId);
+
     return userId === routine.creatorId;
   } catch (error) {
     console.error(error);
