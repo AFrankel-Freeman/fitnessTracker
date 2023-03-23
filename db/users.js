@@ -30,7 +30,15 @@ const getUser = async ({ username, password }) => {
 
 const getUserById = async (userId) => {
   try {
-
+    const { rows: [user] } = await client.query(`
+      SELECT(id, username)
+      FROM users
+      WHERE id=${userId};
+    `)
+    if (!user) {
+      return null;
+    };
+    return user;
   } catch (error) {
     console.error(error);
     throw error;
