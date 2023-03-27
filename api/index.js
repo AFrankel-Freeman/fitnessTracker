@@ -33,8 +33,8 @@ router.use((req, res, next) => {
 
 // GET /api/health
 router.get('/health', async (req, res, next) => {
-    res.status(500)
-    res.body.message = 'API is healthy'
+    res.status(200)
+    res.send({ message: "Api is healthy"})
 
     next();
 });

@@ -29,9 +29,9 @@ app.use((req, res, next) => {
 client.connect();
 
 // Setup your Middleware and API Router here
-const { PORT = 4455 } = process.env;
-app.listen(PORT, ()=> {
-    console.log(`Server running in PORT ${PORT}`)
-});
+// const { PORT = 8080} = process.env;
+// app.listen(PORT, ()=> {
+//     console.log(`Server running in PORT ${PORT}`)
+// });
 
 module.exports = app;
