@@ -33,10 +33,8 @@ router.use((req, res, next) => {
 
 // GET /api/health
 router.get('/health', async (req, res, next) => {
-    res.status(200)
-    res.send({ message: "Api is healthy"})
-
-    next();
+    res.status(200);
+    res.send({ message: "Api is healthy"});
 });
 
 // ROUTER: /api/users
@@ -54,5 +52,10 @@ router.use('/routines', routinesRouter);
 // ROUTER: /api/routine_activities
 const routineActivitiesRouter = require('./routineActivities');
 router.use('/routine_activities', routineActivitiesRouter);
+
+router.get('*', async (req, res, next) => {
+    res.status(404);
+    res.send({ message: "Page not found!"});
+});
 
 module.exports = router;
