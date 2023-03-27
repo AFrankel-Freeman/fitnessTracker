@@ -4,7 +4,7 @@ const app = express();
 const bodyParser= require("body-parser");
 const apiRouter = require('./api');
 const morgan = require('morgan');
-const { client } = require('./db/client');
+const client = require('./db/client');
 
 app.use(bodyParser.json());
 
@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 client.connect();
 
 // Setup your Middleware and API Router here
-const { PORT = 3000 } = process.env;
+const { PORT = 4455 } = process.env;
 app.listen(PORT, ()=> {
     console.log(`Server running in PORT ${PORT}`)
 });
