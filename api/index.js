@@ -8,24 +8,24 @@ router.use(async (req, res, next) => {
     const prefix = 'Bearer ';
     const auth = req.header('Authorization');
 
-    if(!auth) {
+    if (!auth) {
         next();
-    } else if( auth.startsWith(prefix)){
+    } else if (auth.startsWith(prefix)) {
         const token = auth.slice(prefix.length)
-        try{
+        try {
             const { id } = jwt.verify(token, JWT_SECRET)
             if (id) {
                 req.user = await getUserById(id)
                 next();
             }
-        } catch(error){
+        } catch (error) {
             console.error(error)
         }
     }
 })
 
 router.use((req, res, next) => {
-    if(req.user) {
+    if (req.user) {
         console.log(`user is set: ${req.user}`);
     }
     next();
@@ -34,7 +34,7 @@ router.use((req, res, next) => {
 // GET /api/health
 router.get('/health', async (req, res, next) => {
     res.status(200);
-    res.send({ message: "Api is healthy"});
+    res.send({ message: "Api is healthy" });
 });
 
 // ROUTER: /api/users
@@ -55,7 +55,7 @@ router.use('/routine_activities', routineActivitiesRouter);
 
 router.get('*', async (req, res, next) => {
     res.status(404);
-    res.send({ message: "Page not found!"});
+    res.send({ message: "Page not found!" });
 });
 
 module.exports = router;
