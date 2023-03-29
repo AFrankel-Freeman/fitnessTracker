@@ -7,6 +7,7 @@ const requireUser =((req, res, next) => {
         message: "You must be logged in to perform this action",
         error: 'unauthorizedError'
       });
+      return;
     }
     next();
 }) 

@@ -48,24 +48,25 @@ router.post('/', async (req, res) => {
 })
 
 // PATCH /api/activities/:activityId
-router.patch('/:activityId', async (req, res, next) => {
+router.patch('/:activityId', async (req, res) => {
     const activityId = req.params.activityId;
-    
+
     try {
         const activity = await getActivityById(activityId);
-        let doesActivityExist  
-        if(req.body.name) {
+        let doesActivityExist
+        if (req.body.name) {
             doesActivityExist = await getActivityByName(req.body.name);
-        } 
+        }
         if (!activity) {
             res.send({ name: `Activity Not Found Error`, message: `Activity ${activityId} not found`, error: `activityNotFoundError` })
         } else if (doesActivityExist) {
-                res.send({ name: `activity exists error`, message: `An activity with name ${req.body.name} already exists`, error: `activityExistsError` });
-        } else{ const updatedActivity = await updateActivity({ id: activityId, ...req.body })
+            res.send({ name: `activity exists error`, message: `An activity with name ${req.body.name} already exists`, error: `activityExistsError` });
+        } else {
+            const updatedActivity = await updateActivity({ id: activityId, ...req.body })
             res.send(updatedActivity)
         }
-        
-        
+
+
     } catch (error) {
         console.log(error)
     }
