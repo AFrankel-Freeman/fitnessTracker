@@ -71,7 +71,6 @@ const updateRoutineActivity = async ({ id, ...fields }) => {
 };
 
 const destroyRoutineActivity = async (id) => {
-  console.log(id);
   try {
     const { rows: [routineActivity] } = await client.query(`
       DELETE FROM routine_activities
