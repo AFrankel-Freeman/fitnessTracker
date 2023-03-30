@@ -230,7 +230,7 @@ describe("/api/users", () => {
         "Greg"
       );
       // Create a second user to check against
-      const sean = await createFakeUserWithRoutinesAndActivities("Sean");
+      const sean = await createFakeUserWithRoutinesAndActivities("SeanBeatrice");
 
       const response = await request(app)
         .get(`/api/users/${sean.fakeUser.username}/routines`)
