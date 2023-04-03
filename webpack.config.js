@@ -1,21 +1,19 @@
-const path = require("path");
+"use strict"
 
-const config = {
-  entry: "./src/index.js",
-  mode: "development",
-  module: {
-    rules: [
-      {
-        exclude: /(node_modules)/,
-        test: /\.(js|jsx)$/i,
-        loader: "babel-loader"
-      }
-    ]
-  },
-  output: {
-    path: path.resolve(__dirname, "dist")
-  },
-  plugins: []
-};
-
-module.exports = config;
+module.exports = {
+    devtool: 'source-map',
+    module:{
+        rules:[
+            {
+                test: /jsx?$/,
+                exclude: /node_modules/,
+                loader:'babel-loader',
+                options:{
+                    presets: [
+                        '@babel/preset-react'
+                    ]
+                }       
+            },
+        ]
+    }
+}

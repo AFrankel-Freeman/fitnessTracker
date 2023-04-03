@@ -5,6 +5,7 @@ const bodyParser= require("body-parser");
 const apiRouter = require('./api');
 const morgan = require('morgan');
 const client = require('./db/client');
+const path = require ("path");
 
 app.use(bodyParser.json());
 
@@ -13,6 +14,12 @@ app.use(express.json());
 app.use(express.urlencoded({
     extended:true
 }));
+
+app.use("/dist", express.static(path.join(__dirname, "dist")));
+
+app.get("/", (req,res) => {
+    res.sendFile(path.join(__dirname, "index.html"))
+});
 
 app.use('/api', apiRouter);
 
