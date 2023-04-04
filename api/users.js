@@ -55,7 +55,7 @@ router.post('/login', async (req, res) => {
                 expiresIn: '1w'
             });
             res.send({
-                message: "You're logged in!",
+                message: "you're logged in!",
                 token,
                 user
             });

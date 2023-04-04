@@ -11,7 +11,6 @@ const createUser = async ({ username, password }) => {
       ON CONFLICT(username) DO NOTHING
       RETURNING *;
     `, [username, password]);
-    console.log(user);
     delete user.password;
     return user;
   } catch (error) {

@@ -32,7 +32,7 @@ const getRoutineById = async (id) => {
 const getRoutinesWithoutActivities = async () => {
   try {
     const { rows } = await client.query(`
-      SELECT *
+      SELECT routines.*
       FROM routines
       LEFT JOIN routine_activities
       ON routines.id = routine_activities."routineId"
