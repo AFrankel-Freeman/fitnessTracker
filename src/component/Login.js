@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const Login = ({ setIsLoggedIn }) => {
@@ -64,6 +64,7 @@ const Login = ({ setIsLoggedIn }) => {
                         onChange={(event) => setPasswordInput(event.target.value)}>
                     </input>
                 </div>
+                <p>Don't have an account yet? <Link to='/register'>Click here!</Link></p>
                 <button type="submit" className="btn btn-primary">Log In</button>
             </form>
         </>

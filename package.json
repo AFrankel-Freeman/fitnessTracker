@@ -10,7 +10,7 @@
     "start": "node server.js",
     "test": "jest --runInBand",
     "test:watch": "jest --runInBand --watchAll",
-    "build": "webpack",
+    "build": "webpack --mode=production",
     "build:dev": "webpack -w --mode=development"
   },
   "repository": {

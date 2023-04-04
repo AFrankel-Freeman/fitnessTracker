@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 const Register = ({ setIsLoggedIn }) => {
@@ -88,6 +88,7 @@ const Register = ({ setIsLoggedIn }) => {
                             null
                     }
                 </div>
+                <p>Already signed up? <Link to='/login'>Click here!</Link></p>
                 <button type="submit" className="btn btn-primary">Register</button>
             </form >
         </>
