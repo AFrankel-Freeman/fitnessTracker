@@ -10,7 +10,6 @@ const AllRoutines = () =>{
             try{
                 const response = await Axios.get("/api/routines");
                 setRoutineData(response.data)
-                console.log("response/data", response.data)
             } catch(error){
                 console.error(error)
             };
@@ -21,7 +20,7 @@ const AllRoutines = () =>{
     return(
         <>
             <div className="routines">
-                <Link className="btn btn-primary stretched-link" to="/api/newroutine">Create New Routines</Link>
+                <Link className="btn btn-primary" to="/newroutine">Create New Routines</Link>
             {
                 routineData.map((routine, i) =>{
                     return(

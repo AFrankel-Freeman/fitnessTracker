@@ -15,19 +15,19 @@ const Header = ({isLoggedIn, setIsLoggedIn}) =>{
         <header>
             <span className ="logo">Fitness Tracker</span>
             <div className="headerlinks">
-                <Link className="headerlink." to="/">Home</Link>
-                <Link className="headerlink" to ="/routines">Routines</Link>
-                <Link className="headerLink" to ="/activities">Activities</Link>
+                <Link className="btn btn-primary" to="/">Home</Link>
+                <Link className="btn btn-primary" to ="/routines">Routines</Link>
+                <Link className="btn btn-primary" to ="/activities">Activities</Link>
                 {
                     isLoggedIn?
-                        <Link to="/profile">My Activities</Link>:
+                        <Link className="btn btn-primary" to="/profile">My Activities</Link>:
                         <Link to=""></Link> 
                 }
 
                 { 
                     isLoggedIn ?
-                    <Link className="headerlink" to="/" onClick= {logout}>Logout</Link> :
-                    <Link className="headerLink" to="/login">Login/Register</Link> 
+                    <Link className="btn btn-primary" to="/" onClick= {logout}>Logout</Link> :
+                    <Link className="btn btn-primary" to="/login">Login/Register</Link> 
                 }
             </div>
         </header>

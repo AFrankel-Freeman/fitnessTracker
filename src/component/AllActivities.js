@@ -22,7 +22,7 @@ const AllActivities = () =>{
     return(
         <>
             <div className="activities">
-                <Link className="btn btn-primary stretched-link" to="/newactivity">Create New Activity</Link>
+                <Link className="btn btn-primary" to="/newactivity">Create New Activity</Link>
                 {
                     activityData.map((activity,i) => {
                         return(
