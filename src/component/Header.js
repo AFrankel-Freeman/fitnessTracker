@@ -14,10 +14,10 @@ const Header = ({isLoggedIn, setIsLoggedIn}) =>{
         <div>
         <header>
             <span className ="logo">Fitness Tracker</span>
-            <div>
-                <Link className=".stretched-link" to="/">Home</Link>
-                <Link className=".stretched-link" to ="/routines">Routines</Link>
-                <Link className=".stretched-link" to ="/activities">Activities</Link>
+            <div className="headerlinks">
+                <Link className="headerlink." to="/">Home</Link>
+                <Link className="headerlink" to ="/routines">Routines</Link>
+                <Link className="headerLink" to ="/activities">Activities</Link>
                 {
                     isLoggedIn?
                         <Link to="/profile">My Activities</Link>:
