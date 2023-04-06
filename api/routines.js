@@ -35,6 +35,17 @@ router.post('/', requireUser, async (req, res) => {
     }
 });
 
+// GET /api/routines/:routineId
+router.get('/:routineId', async (req, res) => {
+    const routineId = req.params.routineId;
+    try {
+        const routine = await getRoutineById(routineId);
+        res.send(routine);
+    } catch (error) {
+        console.error(error);
+    }
+})
+
 // PATCH /api/routines/:routineId
 router.patch('/:routineId', requireUser, async (req, res) => {
     const routineId = req.params.routineId;
