@@ -20,7 +20,7 @@ const Header = ({isLoggedIn, setIsLoggedIn}) =>{
                 <Link className="btn btn-primary" to ="/activities">Activities</Link>
                 {
                     isLoggedIn?
-                        <Link className="btn btn-primary" to="/profile">My Activities</Link>:
+                        <Link className="btn btn-primary" to="/profile">My Routines</Link>:
                         <Link to=""></Link> 
                 }
 

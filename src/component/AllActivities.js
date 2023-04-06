@@ -2,22 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 
-
-
-const AllActivities = () =>{
-    const [activityData, setActivityData] = useState([]);
-
-    useEffect(() => {
-        const getAllActivities = async() => {
-            try{
-                const response = await Axios.get("/api/activities")
-                setActivityData(response.data);
-            } catch(error){
-                console.error(error)
-            };
-        }
-        getAllActivities();
-    },[]);
+const AllActivities = ({activityData}) =>{
 
     return(
         <>

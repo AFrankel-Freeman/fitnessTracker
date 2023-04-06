@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter, Routes, Route } from "react-router-dom";
+import Axios from "axios";
 import AllActivities from "./component/AllActivities.js";
 import AllRoutines from "./component/AllRoutines.js";
 import EditRoutine from "./component/EditRoutine.js";
@@ -14,6 +15,19 @@ import Register from "./component/Register.js";
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(window.localStorage.getItem('fitness-tracker-token'));
+    const [activityData, setActivityData] = useState([]);
+
+    const getAllActivities = async() => {
+        try{
+            const response = await Axios.get("/api/activities")
+            setActivityData(response.data);
+        } catch(error){
+            console.error(error)
+        };
+    };
+    useEffect(() => {
+        getAllActivities();
+    },[]);
 
     return (
         <>
@@ -30,11 +44,11 @@ const App = () => {
                             setIsLoggedIn={setIsLoggedIn} 
                         />}></Route>
                     <Route path="/routines" element={<AllRoutines />}></Route>
-                    <Route path="/activities" element={<AllActivities />}></Route>
+                    <Route path="/activities" element={<AllActivities activityData = {activityData}/>}></Route>
                     <Route path="/profile" element={<Profile />}></Route>
                     <Route path="/newroutine" element={<NewRoutine />}></Route>
                     <Route path="/newactivity" element={<NewActivity />}></Route>
-                    <Route path="/edit/:routineId" element={<EditRoutine />}></Route>
+                    <Route path="/edit/:routineId" element={<EditRoutine activityData = {activityData}/>}></Route>
                 </Routes>
             </main>
         </>

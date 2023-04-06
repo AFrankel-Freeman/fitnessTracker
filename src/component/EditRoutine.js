@@ -1,16 +1,17 @@
 import Axios from "axios";
+import { ge } from "faker/lib/locales";
 import React, { useState, useEffect } from "react";
 import {useParams} from 'react-router-dom';
 
-const EditRoutine = () =>{
+const EditRoutine = ({activityData}) =>{
     const [editRoutine, setEditRoutine] = useState({});
     const { routineId } = useParams();
-    const [ name, setName ] = useState("");
     const [ goal, setGoal ] = useState("");
     const [ isPublic, setIsPublic ] = useState(false);
     const [ selectedActivityId, setSelectedActivityId ] = useState(0);
     const [ duration, setDuration ] = useState("");
     const [ count, setCount ] = useState("");
+    const [unauthorizedUserError, setUnauthorizedUserError] = useState(false);
 
     const getRoutine = async() => {
         try{
@@ -20,32 +21,77 @@ const EditRoutine = () =>{
             console.error(error);
         }
     }
+    const setValues= () =>{if(editRoutine && Object.keys(editRoutine).length){
+        setGoal(editRoutine.goal);
+        setIsPublic(editRoutine.isPublic);
+    }
+    }
     useEffect(() => {
         getRoutine();
+        setValues();
     },[])
 
     useEffect(() => {
-        if(editRoutine && Object.keys(editRoutine).length){
-            setName(editRoutine.name);
-            setGoal(editRoutine.goal);
-            setIsPublic(editRoutine.isPublic);
-        }
-    })
-    const editRoutineData = (event) =>{
+        setValues();
+    }, [editRoutine])
+
+    const editRoutineData = async (event) =>{
         event.preventDefault();
+        const fields = {}
+        if(goal && goal !== editRoutine.goal){
+            fields.goal=goal
+        };
+        if(isPublic !== editRoutine.isPublic){
+            fields.isPublic=isPublic
+        };
+        if(Object.keys(fields).length){
+            setUnauthorizedUserError(false);
+            try{
+                const response = await Axios.patch(`/api/routines/${routineId}`, fields, {
+                    headers:{
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
+                    },
+                });
+            getRoutine();        
+            } catch(error){
+                if(error.response.status === 401){
+                    setUnauthorizedUserError(true);
+                }
+                console.error(error)
+            };
+        }
     };
     const addActivity = (event) => {
         event.preventDefault();
+    };
+    const deleteActivity = async (routineActivityId) => {
+        try{
+            await fetch(`/api/routine_activities/${routineActivityId}`,{
+                method: 'DELETE',
+                headers:{
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
+                },
+            });
+            getRoutine();
+        } catch(error) {
+            console.error(error);
+        }
     }
     return(
        <>
+       {
+        (unauthorizedUserError)?
+        <p>You may not edit a routine that is not registered to user</p> :
+        null
+       }
         <form onSubmit = {editRoutineData}>
-            <div className="mb-3">
-                <label htmlFor="name" className="form-label">Routine Name</label>
-                <input className="form-control" id="name" value = {name} onChange = {(event)=>{
-                    setName(event.target.value)
-                }}></input>
-            </div>
+            {
+                (Object.keys(editRoutine).length) ?
+                <h5>{editRoutine.name}</h5>:
+                null
+            }
             <div className="mb-3">
             <label htmlFor="goal" className="form-label">Routine Goal</label>
             <input className="form-control" id="goal" value = {goal} onChange = {(event)=>{
@@ -53,17 +99,46 @@ const EditRoutine = () =>{
             }}></input>
         </div>
         <div className="form-check">
-            <input className="form-check-input" type="checkbox" value = {isPublic} id="isPublic" onClick={(event)=>{
+            <input className="form-check-input" type="checkbox" checked = {isPublic} id="isPublic" onChange={(event)=>{
                 setIsPublic(event.target.value)
             }}></input>
             <label className="form-check-label" htmlFor="isPublic">Public</label>
         </div>
         <button type ="submit" className="btn btn-primary">Edit Routine Details</button>
         </form>
+        {
+            (Object.keys(editRoutine).length)?
+                editRoutine.activities.map((activity, i) => {
+                    return(
+                        <div className="card routine-activity-card" key={i}>
+                        <div className="card-body">
+                            <h5 className="card-title">{activity.name}</h5>
+                            <p className="card-text">{activity.description}</p>
+                            <p className="card-text">Duration: {activity.duration}</p>
+                            <p className="card-text"> Count: {activity.count}</p>
+                            <button className="btn btn-danger" onClick={()=>{
+                                deleteActivity(activity.id);
+                            }}>Delete Activity</button>
+                        </div>
+                    </div>
+                    )
+                }):
+                null
+        }
         <form onSubmit = {addActivity}>
+        <select className="form-select">
+            <option value = "0">Select Activity to Add</option>
+            {
+                activityData.length ?
+                activityData.map((activity,i) =>{
+                    return (
+                        <option value = {activity.id} key={i}>{activity.name}</option>)
+                }) :
+                null
+            }
+        </select>
         </form>
        </>
     )
 }
-
 export default EditRoutine;
