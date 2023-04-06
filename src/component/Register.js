@@ -69,7 +69,7 @@ const Register = ({ setIsLoggedIn }) => {
                     </input>
                     {
                         (passwordOneInput && passwordOneInput.length < 8) ?
-                            <div class="form-text">Password must be at least 8 characters.</div> :
+                            <div className="form-text">Password must be at least 8 characters.</div> :
                             null
                     }
                 </div>

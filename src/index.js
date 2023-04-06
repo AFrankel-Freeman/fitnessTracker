@@ -17,17 +17,17 @@ const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(window.localStorage.getItem('fitness-tracker-token'));
     const [activityData, setActivityData] = useState([]);
 
-    const getAllActivities = async() => {
-        try{
+    const getAllActivities = async () => {
+        try {
             const response = await Axios.get("/api/activities")
             setActivityData(response.data);
-        } catch(error){
+        } catch (error) {
             console.error(error)
         };
     };
     useEffect(() => {
         getAllActivities();
-    },[]);
+    }, []);
 
     return (
         <>
@@ -41,14 +41,17 @@ const App = () => {
                         />}></Route>
                     <Route path="/register" element={
                         <Register
-                            setIsLoggedIn={setIsLoggedIn} 
+                            setIsLoggedIn={setIsLoggedIn}
                         />}></Route>
                     <Route path="/routines" element={<AllRoutines />}></Route>
-                    <Route path="/activities" element={<AllActivities activityData = {activityData}/>}></Route>
+                    <Route path="/activities" element={
+                        <AllActivities
+                            activityData={activityData}
+                        />}></Route>
                     <Route path="/profile" element={<Profile />}></Route>
                     <Route path="/newroutine" element={<NewRoutine />}></Route>
                     <Route path="/newactivity" element={<NewActivity />}></Route>
-                    <Route path="/edit/:routineId" element={<EditRoutine activityData = {activityData}/>}></Route>
+                    <Route path="/edit/:routineId" element={<EditRoutine activityData={activityData} />}></Route>
                 </Routes>
             </main>
         </>

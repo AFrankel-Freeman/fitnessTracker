@@ -1,0 +1,58 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    height: 90px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 70px;
+    padding-top: 3em;
+    min-height: calc(100vh - 90px);
+    z-index: 0;
+}
+
+.headerlinks > .btn {
+    margin: 0 1em;
+}
+.logo {
+    font-size: xx-large;
+    letter-spacing: .5em;
+}
+
+.routines, .activities, .edit-routine-form, .edit-routine-details-form, .add-activity-form  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.routine-card, .activity-card, .edit-routine-form > .routine-activity-card {
+    width: 80vw;
+}
+
+.routine-card, .activity-card, .routine-activity-card {
+    margin: 1em 0;
+}
+
+.activity-select, .edit-routine-button {
+    margin-bottom: .5em;
+}
+
+.delete-routine-button {
+    margin-right: 1em;
+}
