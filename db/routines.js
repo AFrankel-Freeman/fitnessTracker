@@ -22,6 +22,7 @@ const getRoutineById = async (id) => {
       FROM routines
       WHERE id = ${id}
     `);
+    await attachActivitiesToRoutines([routine])
     return routine;
   } catch (error) {
     console.error(error);
