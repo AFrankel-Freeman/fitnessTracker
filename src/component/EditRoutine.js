@@ -12,6 +12,7 @@ const EditRoutine = ({activityData}) =>{
     const [ duration, setDuration ] = useState("");
     const [ count, setCount ] = useState("");
     const [unauthorizedUserError, setUnauthorizedUserError] = useState(false);
+    const [duplicateRoutineActivity, setDuplicateRoutineActivity] = useState(false);
 
     const getRoutine = async() => {
         try{
@@ -62,8 +63,35 @@ const EditRoutine = ({activityData}) =>{
             };
         }
     };
-    const addActivity = (event) => {
+    const addActivity = async (event) => {
         event.preventDefault();
+        setUnauthorizedUserError(false);
+        setDuplicateRoutineActivity(false);
+        if(selectedActivityId !== "0" && count && duration){
+            try{
+                const response = await Axios.post(`/api/routines/${routineId}/activities`,{
+                    activityId : selectedActivityId, count:count, duration:duration
+                },{
+                    headers:{
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
+                    },
+                })
+                if(response.data.error === "unauthorizedUpdateError"){
+                    setUnauthorizedUserError(true);
+                } else if(
+                    response.data.error === "duplicateRoutineActivityError" 
+                ){
+                    setDuplicateRoutineActivity(true);
+                } else {
+                    getRoutine();
+                    setDuration("");
+                    setCount("");
+                }
+            }catch(error) {
+                console.error(error)
+            }
+        }
     };
     const deleteActivity = async (routineActivityId) => {
         try{
@@ -78,7 +106,7 @@ const EditRoutine = ({activityData}) =>{
         } catch(error) {
             console.error(error);
         }
-    }
+    };
     return(
        <>
        {
@@ -92,7 +120,7 @@ const EditRoutine = ({activityData}) =>{
                 <h5>{editRoutine.name}</h5>:
                 null
             }
-            <div className="mb-3">
+        <div className="mb-3">
             <label htmlFor="goal" className="form-label">Routine Goal</label>
             <input className="form-control" id="goal" value = {goal} onChange = {(event)=>{
                 setGoal(event.target.value)
@@ -125,8 +153,15 @@ const EditRoutine = ({activityData}) =>{
                 }):
                 null
         }
+        {
+            (duplicateRoutineActivity)?
+            <p>Activity Already Exists in Routine</p>:
+             null
+        }
         <form onSubmit = {addActivity}>
-        <select className="form-select">
+        <select className="form-select" onChange = {(event)=>{
+            setSelectedActivityId(event.target.value)
+        }}>
             <option value = "0">Select Activity to Add</option>
             {
                 activityData.length ?
@@ -137,6 +172,19 @@ const EditRoutine = ({activityData}) =>{
                 null
             }
         </select>
+        <div className="mb-3">
+            <label htmlFor="duration" className="form-label">Activity Duration</label>
+            <input className="form-control" id="goal" value = {duration} onChange = {(event)=>{
+                setDuration(event.target.value)
+            }}></input>
+        </div>
+        <div className="mb-3">
+            <label htmlFor="count" className="form-label">Activity Count</label>
+            <input className="form-control" id="count" value = {count} onChange = {(event)=>{
+                setCount(event.target.value)
+            }}></input>
+        </div>
+        <button type = "submit" className="btn btn-primary">Add Activity</button>
         </form>
        </>
     )
