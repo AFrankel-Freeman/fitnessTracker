@@ -2,6 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const requireUser = require('./utils');
 require('dotenv').config();
 
@@ -47,7 +48,7 @@ router.post('/login', async (req, res) => {
         }
         const user = await getUserByUsername(username);
 
-        if (user && user.password === password) {
+        if (user && await bcrypt.compare(password, user.password)) {
             const token = jwt.sign({
                 id: user.id,
                 username

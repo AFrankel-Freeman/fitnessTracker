@@ -1,10 +1,12 @@
 const client = require("./client");
+const bcrypt = require('bcrypt');
 
 // database functions
 
 // user functions
 const createUser = async ({ username, password }) => {
   try {
+    password = await bcrypt.hash(password, 10);
     const { rows: [user] } = await client.query(`
       INSERT INTO users(username, password)
       VALUES($1, $2)
@@ -25,13 +27,12 @@ const getUser = async ({ username, password }) => {
       SELECT *
       FROM users
       WHERE username = '${username}'
-      AND password = '${password}'
     `)
-    if(user){
+    if(user && await bcrypt.compare(password, user.password)){
       delete user.password
+      return user;
     }
-
-    return user;
+    return null;
   } catch (error) {
     console.error(error);
     throw error;
