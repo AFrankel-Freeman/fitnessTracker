@@ -2,7 +2,23 @@ import React from 'react';
 import { Link, useLocation } from "react-router-dom";
 import RoutineActivity from './RoutineActivity';
 
-const SingleRoutine = ({ routine }) => {
+const SingleRoutine = ({ routine, getProfile }) => {
+
+    const deleteRoutine = async (routineId) => {
+        try {
+            await fetch(`/api/routines/${routineId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
+                }
+            })
+            getProfile();
+        } catch (error) {
+            console.error(error);
+        };
+    };
+
     return (
         <div className="card routine-card">
             <div className="card-body">

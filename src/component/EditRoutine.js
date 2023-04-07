@@ -6,7 +6,7 @@ import RoutineActivity from "./RoutineActivity";
 const EditRoutine = ({ activityData }) => {
     const [editRoutine, setEditRoutine] = useState({});
     const [goal, setGoal] = useState("");
-    const [ name, setName] = useState("");
+    const [name, setName] = useState("");
     const [isPublic, setIsPublic] = useState(false);
     const [selectedActivityId, setSelectedActivityId] = useState(0);
     const [duration, setDuration] = useState("");
@@ -146,7 +146,7 @@ const EditRoutine = ({ activityData }) => {
                 }
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label">Routine Name</label>
-                    <input className="form-control" id="name" value={name} onChange={(event) =>{
+                    <input className="form-control" id="name" value={name} onChange={(event) => {
                         setName(event.target.value)
                     }}></input>
                 </div>
@@ -168,10 +168,10 @@ const EditRoutine = ({ activityData }) => {
                 (Object.keys(editRoutine).length) ?
                     editRoutine.activities.map((activity, i) => {
                         return (
-                            <RoutineActivity 
-                            activity={activity} deleteActivity={deleteActivity} 
-                            setUnauthorizedUserError={setUnauthorizedUserError} setSuccessfulMessage = {setSuccessfulMessage} 
-                            getRoutine={getRoutine} key={i} 
+                            <RoutineActivity
+                                activity={activity} deleteActivity={deleteActivity}
+                                setUnauthorizedUserError={setUnauthorizedUserError} setSuccessfulMessage={setSuccessfulMessage}
+                                getRoutine={getRoutine} key={i}
                             />
                         )
                     }) :

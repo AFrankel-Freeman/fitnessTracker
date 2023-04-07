@@ -24,24 +24,8 @@ const Profile = () => {
     }
 
     useEffect(() => {
-
         getProfile()
     }, [])
-
-    const deleteRoutine = async (routineId) => {
-        try {
-            const response = await fetch(`/api/routines/${routineId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
-                }
-            })
-            getProfile();
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
     return (
         <>
@@ -50,7 +34,7 @@ const Profile = () => {
                 {
                     profile.map((routine, i) => {
                         return (
-                            <SingleRoutine routine={routine} key={i} />
+                            <SingleRoutine routine={routine} getProfile={getProfile} key={i} />
                         )
                     })
                 }
