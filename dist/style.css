@@ -9,12 +9,13 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    height: 90px;
+    height: 110px;
     width: 100%;
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
+    background-color: darkslategray ;
 }
 
 main {
@@ -23,8 +24,9 @@ main {
     align-items: center;
     margin-top: 70px;
     padding-top: 3em;
-    min-height: calc(100vh - 90px);
+    min-height: calc(100vh - 110px);
     z-index: 0;
+    background-color: gainsboro;
 }
 
 .headerlinks > .btn {
