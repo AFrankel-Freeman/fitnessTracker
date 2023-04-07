@@ -1,6 +1,5 @@
 import Axios from "axios";
-import { response } from "express";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const NewActivity = () =>{
     const [ name, setName ] = useState("")
@@ -8,23 +7,24 @@ const NewActivity = () =>{
     const [ activityExists, setActivityExists ] = useState(false);
 
     const createActivity = async () => {
-        try {
-            const activity = await Axios.post("/api/activities", {name, description}, {
-                method: "POST",
-                headers: {
-                    'Content-Type' : 'application/json',
-                    'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
-                },
-            })
-            if(response.data.error === "activityExistsError"){
-                setActivityExists(true)
-            } else {
-                setName("")
-                setDescription("")
-            }
+        if( name && description){
+            try {
+                const activity = await Axios.post("/api/activities", {name, description}, {
+                    headers: {
+                        'Content-Type' : 'application/json',
+                        'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
+                    },
+                })
+                if(activity.data.error === "activityExistsError"){
+                    setActivityExists(true)
+                } else {
+                    setName("")
+                    setDescription("")
+                }
 
-        } catch (error) {
-            console.error(error);
+            } catch (error) {
+                console.error(error);
+            }
         }
     }
     return(
@@ -48,7 +48,6 @@ const NewActivity = () =>{
                 </div>
                 <button type="submit" className="btn btn-primary">Submit Activity</button>
             </form>
-
         </>
     )
 }

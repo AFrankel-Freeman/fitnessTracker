@@ -1,6 +1,6 @@
 const express = require('express');
 const { getPublicRoutinesByActivity } = require('../db');
-const { requireUser } = require('./utils');
+const requireUser = require('./utils');
 const router = express.Router();
 const { getAllActivities, getActivityByName, createActivity, getActivityById, updateActivity } = require('../db/activities');
 
