@@ -16,7 +16,12 @@ const Profile = () => {
                     'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
                 }
             })
-            const response = await Axios.get(`/api/users/${user.data.username}/routines`)
+            const response = await Axios.get(`/api/users/${user.data.username}/routines`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
+                }
+            })
             setProfile(response.data)
         } catch (error) {
             console.error(error);

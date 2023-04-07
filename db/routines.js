@@ -22,7 +22,9 @@ const getRoutineById = async (id) => {
       FROM routines
       WHERE id = ${id}
     `);
-    await attachActivitiesToRoutines([routine])
+    if (routine) {
+      await attachActivitiesToRoutines([routine])
+    }
     return routine;
   } catch (error) {
     console.error(error);
@@ -86,7 +88,7 @@ const getAllRoutinesByUser = async ({ username }) => {
 };
 
 const getPublicRoutinesByUser = async ({ username }) => {
-  try{
+  try {
     const allRoutines = await getAllRoutines();
     const publicRoutinesByUser = allRoutines.filter(routine => routine.creatorName === username && routine.isPublic);
     return publicRoutinesByUser;
@@ -98,13 +100,13 @@ const getPublicRoutinesByUser = async ({ username }) => {
 };
 
 const getPublicRoutinesByActivity = async ({ id }) => {
-  try{
+  try {
     const allRoutines = await getAllRoutines();
     const publicRoutinesByActivity = allRoutines.filter(routine => {
       let containsActivity = false;
-      for(let i = 0; i< routine.activities.length; i++){
-        if(routine.activities[i].id === id){
-          containsActivity= true;
+      for (let i = 0; i < routine.activities.length; i++) {
+        if (routine.activities[i].id === id) {
+          containsActivity = true;
           break;
         }
       }
@@ -118,21 +120,21 @@ const getPublicRoutinesByActivity = async ({ id }) => {
 };
 
 const updateRoutine = async ({ id, ...fields }) => {
-      const setString = Object.keys(fields).map(
-      (key, index) => `"${key}" = $${index + 1}`
-    ).join(', ');
-    if (!setString.length) {
-      return
-    }
-    try {
-      const { rows: [routine] } = await client.query(`
+  const setString = Object.keys(fields).map(
+    (key, index) => `"${key}" = $${index + 1}`
+  ).join(', ');
+  if (!setString.length) {
+    return
+  }
+  try {
+    const { rows: [routine] } = await client.query(`
         UPDATE routines
         SET ${setString}
         WHERE id = ${id}
         RETURNING *;
       `, Object.values(fields))
 
-      return routine;
+    return routine;
   } catch (error) {
     console.error(error);
     throw error

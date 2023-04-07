@@ -25,6 +25,14 @@ const SingleRoutine = ({ routine, getProfile }) => {
                 <h5 className="card-title">{routine.name}</h5>
                 <h6 className="card-subtitle mb-2 text-body-secondary">{routine.creatorName}</h6>
                 <p className="card-text">{routine.goal}</p>
+                {
+                    (useLocation().pathname === '/profile') ?
+                        (routine.isPublic) ?
+                            <p className="card-text">Public</p> :
+                            <p className="card-text">Private</p>
+                        :
+                        null
+                }
                 <h5 className="card-title">Activities:</h5>
                 {
                     routine.activities.map((activity, i) => {

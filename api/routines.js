@@ -97,7 +97,7 @@ router.post('/:routineId/activities', requireUser, async (req, res) => {
                 routineId, activityId, count, duration
             });
             if (!routineActivity) {
-                res.send({ name: 'Duplicate Routine Activity Error', message: `Activity ID ${activityId} already exists in Routine ID ${routineId}`, error: 'duplicateRoutineActivityError'})
+                res.send({ name: 'Duplicate Routine Activity Error', message: `Activity ID ${activityId} already exists in Routine ID ${routineId}`, error: 'duplicateRoutineActivityError' })
             } else {
                 res.send(routineActivity);
             }
