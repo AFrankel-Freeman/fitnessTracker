@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import { Link } from "react-router-dom";
 import SingleRoutine from "./SingleRoutine";
+
 
 
 const Profile = () => {
@@ -44,6 +46,7 @@ const Profile = () => {
     return (
         <>
             <div className="routines">
+            <Link className="btn btn-primary" to="/newroutine">Create New Routine</Link>
                 {
                     profile.map((routine, i) => {
                         return (

@@ -21,7 +21,6 @@ const AllRoutines = () => {
     return (
         <>
             <div className="routines">
-                <Link className="btn btn-primary" to="/newroutine">Create New Routine</Link>
                 {
                     routineData.map((routine, i) => {
                         return (
