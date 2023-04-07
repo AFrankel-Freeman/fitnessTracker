@@ -1,5 +1,6 @@
 const express = require('express');
 const { getPublicRoutinesByActivity } = require('../db');
+const { requireUser } = require('./utils');
 const router = express.Router();
 const { getAllActivities, getActivityByName, createActivity, getActivityById, updateActivity } = require('../db/activities');
 
@@ -30,7 +31,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST /api/activities
-router.post('/', async (req, res) => {
+router.post('/',requireUser, async (req, res) => {
     const { name, description } = req.body;
     try {
         const activity = await getActivityByName(name);

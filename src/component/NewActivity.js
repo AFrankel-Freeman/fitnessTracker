@@ -1,27 +1,55 @@
 import Axios from "axios";
+import { response } from "express";
 import React, { useState, useEffect } from "react";
 
-// const NewActivity = () =>{
-//     const [ name, setName ] = useState("")
-//     const [ description, setDescription ] = useState("")
+const NewActivity = () =>{
+    const [ name, setName ] = useState("")
+    const [ description, setDescription ] = useState("")
+    const [ activityExists, setActivityExists ] = useState(false);
 
-//     const createActivity = async () => {
-//         try {
-//             const activity = await Axios.post("/api/activities", {
-//                 method: "POST",
-//                 headers: {
-//                     'Content-Type' : 'application/json',
-//                     'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
-//                 },
-//             })
-//             const response = await Axios.get(`/api/activities`)
+    const createActivity = async () => {
+        try {
+            const activity = await Axios.post("/api/activities", {name, description}, {
+                method: "POST",
+                headers: {
+                    'Content-Type' : 'application/json',
+                    'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
+                },
+            })
+            if(response.data.error === "activityExistsError"){
+                setActivityExists(true)
+            } else {
+                setName("")
+                setDescription("")
+            }
 
-//         } catch (error) {
-//             console.error(error);
-//         }
-//     }
+        } catch (error) {
+            console.error(error);
+        }
+    }
     return(
-        <p>NewActivity</p>
+        <>
+            {(activityExists) ?
+                <p>Activity Already Exists</p> :
+                null
+            }
+            <form onSubmit = {createActivity} >
+                <div className="mb-3">
+                    <label htmlFor="name" className="form-label">Activity Name</label>
+                    <input className="form-control" id="name" value={name} onChange={(event) =>{
+                        setName(event.target.value)
+                    }}></input>
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="description" className="form-label">Activity Description</label>
+                    <input className="form-control" id="description" value={description} onChange={(event) =>{
+                        setDescription(event.target.value)
+                    }}></input>
+                </div>
+                <button type="submit" className="btn btn-primary">Submit Activity</button>
+            </form>
+
+        </>
     )
 }
 
