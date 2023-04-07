@@ -1,7 +1,7 @@
 import Axios from "axios";
 import React, { useState } from "react";
 
-const NewActivity = () => {
+const NewActivity = ({ getAllActivities }) => {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [activityExists, setActivityExists] = useState(false);
@@ -21,7 +21,7 @@ const NewActivity = () => {
                     setName("")
                     setDescription("")
                 }
-
+                getAllActivities();
             } catch (error) {
                 console.error(error);
             }

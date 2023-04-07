@@ -84,7 +84,7 @@ const Register = ({ setIsLoggedIn }) => {
                     </input>
                     {
                         (passwordOneInput !== passwordTwoInput) ?
-                            <div class="form-text">Passwords must match!</div> :
+                            <div className="form-text">Passwords must match!</div> :
                             null
                     }
                 </div>

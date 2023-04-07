@@ -50,7 +50,9 @@ const App = () => {
                         />}></Route>
                     <Route path="/profile" element={<Profile />}></Route>
                     <Route path="/newroutine" element={<NewRoutine />}></Route>
-                    <Route path="/newactivity" element={<NewActivity />}></Route>
+                    <Route path="/newactivity" element={
+                        <NewActivity
+                            getAllActivities={getAllActivities} />}></Route>
                     <Route path="/edit/:routineId" element={<EditRoutine activityData={activityData} />}></Route>
                 </Routes>
             </main>
