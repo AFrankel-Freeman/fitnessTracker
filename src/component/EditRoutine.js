@@ -6,13 +6,14 @@ import RoutineActivity from "./RoutineActivity";
 const EditRoutine = ({ activityData }) => {
     const [editRoutine, setEditRoutine] = useState({});
     const [goal, setGoal] = useState("");
+    const [ name, setName] = useState("");
     const [isPublic, setIsPublic] = useState(false);
     const [selectedActivityId, setSelectedActivityId] = useState(0);
     const [duration, setDuration] = useState("");
     const [count, setCount] = useState("");
     const [unauthorizedUserError, setUnauthorizedUserError] = useState(false);
     const [duplicateRoutineActivity, setDuplicateRoutineActivity] = useState(false);
-
+    const [successfulMessage, setSuccessfulMessage] = useState(false)
     const { routineId } = useParams();
 
     const getRoutine = async () => {
@@ -26,6 +27,7 @@ const EditRoutine = ({ activityData }) => {
 
     const setValues = () => {
         if (editRoutine && Object.keys(editRoutine).length) {
+            setName(editRoutine.name)
             setGoal(editRoutine.goal);
             setIsPublic(editRoutine.isPublic);
         };
@@ -42,7 +44,11 @@ const EditRoutine = ({ activityData }) => {
 
     const editRoutineData = async (event) => {
         event.preventDefault();
+        setSuccessfulMessage(false);
         const fields = {}
+        if (name && name !== editRoutine.name) {
+            fields.name = name
+        };
         if (goal && goal !== editRoutine.goal) {
             fields.goal = goal
         };
@@ -58,7 +64,7 @@ const EditRoutine = ({ activityData }) => {
                         'Authorization': `Bearer ${window.localStorage.getItem("fitness-tracker-token")}`
                     },
                 });
-                console.log(response);
+                setSuccessfulMessage(true);
                 getRoutine();
             } catch (error) {
                 if (error.response.status === 403) {
@@ -127,12 +133,23 @@ const EditRoutine = ({ activityData }) => {
                     <p>You may not edit a routine that is not registered to user</p> :
                     null
             }
+            {
+                (successfulMessage) ?
+                    <p>Routine Updated</p> :
+                    null
+            }
             <form onSubmit={editRoutineData} className="edit-routine-details-form">
                 {
                     (Object.keys(editRoutine).length) ?
                         <h5>{editRoutine.name}</h5> :
                         null
                 }
+                <div className="mb-3">
+                    <label htmlFor="name" className="form-label">Routine Name</label>
+                    <input className="form-control" id="name" value={name} onChange={(event) =>{
+                        setName(event.target.value)
+                    }}></input>
+                </div>
                 <div className="mb-3">
                     <label htmlFor="goal" className="form-label">Routine Goal</label>
                     <input className="form-control" id="goal" value={goal} onChange={(event) => {
@@ -151,7 +168,11 @@ const EditRoutine = ({ activityData }) => {
                 (Object.keys(editRoutine).length) ?
                     editRoutine.activities.map((activity, i) => {
                         return (
-                            <RoutineActivity activity={activity} deleteActivity={deleteActivity} key={i} />
+                            <RoutineActivity 
+                            activity={activity} deleteActivity={deleteActivity} 
+                            setUnauthorizedUserError={setUnauthorizedUserError} setSuccessfulMessage = {setSuccessfulMessage} 
+                            getRoutine={getRoutine} key={i} 
+                            />
                         )
                     }) :
                     null
