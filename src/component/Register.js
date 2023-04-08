@@ -33,7 +33,6 @@ const Register = ({ setIsLoggedIn }) => {
                     setPasswordTwoInput('');
                     navigate('/profile');
                 }
-                console.log(response);
             } catch (error) {
                 console.error(error);
             };
